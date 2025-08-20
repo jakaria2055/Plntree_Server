@@ -1,5 +1,7 @@
 import {
+  readProfileService,
   refreshAccessTokenService,
+  saveProfileService,
   userLoginService,
   userLogoutService,
   userRegisterService,
@@ -91,7 +93,7 @@ export const refreshAccessToken = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
   try {
-    const  refreshtoken  = req.cookies?.refreshtoken;
+    const refreshtoken = req.cookies?.refreshtoken;
 
     if (!refreshtoken) {
       return res
@@ -111,4 +113,19 @@ export const logoutUser = async (req, res) => {
       .status(error.statusCode || 500)
       .json({ message: error.message || "Something went wrong" });
   }
+};
+
+export const createProfile = async (req, res) => {
+  const result = await saveProfileService(req);
+  return res.status(200).json(result);
+};
+
+export const readProfile = async (req, res) => {
+  const result = await readProfileService(req);
+  return res.status(200).json(result);
+};
+
+export const updateProfile = async (req, res) => {
+  const result = await saveProfileService(req);
+  return res.status(200).json(result);
 };

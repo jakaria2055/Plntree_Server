@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import UserModel from "../model/userModel.js";
 import { sendOTPtoEmail } from "../utils/mailer.js";
 import { generateTokens, verifyOTP } from "../utils/helper.js";
+import ProfileModel from "../model/profileModel..js";
 
 export const userRegisterService = async (email, password) => {
   if (!email || !password) {
@@ -173,4 +174,38 @@ export const userLogoutService = async (userId, refreshtoken) => {
   );
 
   return { message: "User logged out successfully!" };
+};
+
+export const saveProfileService = async (req) => {
+  try {
+    const userID = req.user._id;
+    let reqBody = req.body;
+    reqBody.userID = userID;
+
+    const result = await ProfileModel.updateOne(
+      { userID: userID },
+      { $set: reqBody },
+      { upsert: true }
+    );
+
+
+    return { status: "success", message: "Profile saved successfully." };
+  } catch (e) {
+    return { status: "fail", data: e.message || e.toString() };
+  }
+};
+
+export const readProfileService = async (req) => {
+  try {
+    const userID = req.user._id;
+    const result = await ProfileModel.find({ userID: userID });
+
+    return {
+      status: "success",
+      data: result,
+      message: "Finded your profile data...",
+    };
+  } catch (e) {
+    return { status: "fail", data: e.message || e.toString() };
+  }
 };
