@@ -5,6 +5,8 @@ import cors from 'cors';
 import router from './src/routes/api.js';
 
 
+
+
 const app = express();
 
 //MIDDLEWARES
